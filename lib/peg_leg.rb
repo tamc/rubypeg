@@ -90,6 +90,18 @@ class PegLeg
     end
   end
   
+  def followed_by(&block)
+    start_index = self.index
+    result = sequence(&block)
+    self.index = start_index
+    return :ignore if result
+    return nil
+  end
+  
+  def not_followed_by(&block)
+    followed_by(&block) ? nil : :ignore
+  end
+  
   def uncached_terminal(t)
     case t
     when String
