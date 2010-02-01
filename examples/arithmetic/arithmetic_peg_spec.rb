@@ -1,5 +1,5 @@
-$:.unshift File.join(File.dirname(__FILE__), *%w[.. examples])
-$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+$:.unshift File.join(File.dirname(__FILE__), *%w[.])
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
 require 'peg_leg'
 require 'arithmetic_peg'
 
