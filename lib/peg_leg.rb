@@ -40,6 +40,13 @@ class PegLeg
     self.new.parse(text)
   end
   
+  def self.parse_and_dump(text)
+    e = new
+    r = e.parse(text)
+    e.pretty_print_cache
+    r
+  end
+  
   attr_accessor :index, :text, :cache, :sequences
   
   def parse(text)
