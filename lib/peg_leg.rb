@@ -60,6 +60,10 @@ class PegLeg
     nil
   end
   
+  def any_character
+    terminal /./
+  end
+  
   def optional
     return yield || :ignore
   end
