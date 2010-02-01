@@ -1,4 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. examples])
+
 require 'peg_leg'
 require 'excel_peg'
 
