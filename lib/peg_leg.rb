@@ -11,6 +11,7 @@ class NonTerminalNode
     return [type,children.to_ast] unless children.is_a? Array
     return [type,children.first.to_ast] if children.size == 1
     return [type,*children.map(&:to_ast)] if children.size >= 1
+    return [type]
   end
 
   def inspect; "[#{type},#{children.map(&:inspect).join(',')}]" end
@@ -59,6 +60,10 @@ class PegLeg
     nil
   end
   
+  def optional
+    return yield || :ignore
+  end
+  
   def one_or_more
     results = []
     while result = yield
@@ -73,7 +78,7 @@ class PegLeg
     while result = yield
       results << result 
     end
-    results    
+    results
   end
   
   def sequence
