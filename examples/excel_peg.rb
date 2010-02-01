@@ -70,6 +70,26 @@ module ExcelReferencePeg
   end
 end
 
+module ExcelStringPeg
+  def string
+    node :string do
+      ignore { terminal('"') } && terminal(/[^"]*/) && ignore { terminal('"') }
+    end
+  end
+  
+  def string_join
+    node :string_join do
+       one_or_more { left_string_join } && ( string || any_reference || percentage || number )
+    end
+  end
+  
+  def left_string_join
+    sequence do
+      ( string || any_reference || percentage || number ) && ignore { terminal('&') }
+    end
+  end
+end
+
 module NumberPeg
   def number
     node :number do
@@ -87,11 +107,12 @@ end
 
 class ExcelPeg < PegLeg
   include ExcelReferencePeg
+  include ExcelStringPeg
   include NumberPeg
   
   def root
     node :formula do
-      one_or_more { any_reference || percentage || number } || terminal(/.*/)
+      one_or_more { string_join || string || any_reference || percentage || number } || terminal(/.*/)
     end
   end
   

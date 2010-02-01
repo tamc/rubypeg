@@ -65,6 +65,18 @@ describe ExcelPeg do
     ExcelPeg.parse("-1.0%").to_ast.should == [:formula,[:percentage,'-1.0%']]
   end
   
+  it "returns strings" do
+    ExcelPeg.parse('"A handy string"').to_ast.should == [:formula,[:string,"A handy string"]]
+    ExcelPeg.parse('"$A$1"').to_ast.should == [:formula,[:string,"$A$1"]]  
+  end
   
+  it "returns string joins" do
+    check '"A handy string"&$A$1'
+    ExcelPeg.parse('"A handy string"&$A$1').to_ast.should == [:formula,[:string_join,[:string,"A handy string"],[:cell,'$A$1']]]
+    ExcelPeg.parse('$A$1&"A handy string"').to_ast.should == [:formula,[:string_join,[:cell,'$A$1'],[:string,"A handy string"]]]
+    ExcelPeg.parse('$A$1&"A handy string"&$A$1').to_ast.should == [:formula,[:string_join,[:cell,'$A$1'],[:string,"A handy string"],[:cell,'$A$1'],]]
+    ExcelPeg.parse('$A$1&$A$1&$A$1').to_ast.should == [:formula,[:string_join,[:cell,'$A$1'],[:cell,'$A$1'],[:cell,'$A$1'],]]
+    
+  end
   
 end
