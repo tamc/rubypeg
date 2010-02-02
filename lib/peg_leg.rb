@@ -7,6 +7,20 @@ class NonTerminalNode
     self.children = children
   end
   
+  def build(builder)
+    if builder.respond_to?(type)      
+      return builder.send(type) unless children
+      return builder.send(type,children) unless children.is_a?(Array)
+      return builder.send(type,children.first) if children.size == 1
+      return builder.send(type,*children)
+    else
+      return type unless children
+      return children.build(builder) unless children.is_a?(Array)
+      return children.first.build(builder) if children.size == 1
+      return children.map { |c| c.build(builder) }      
+    end
+  end
+  
   def to_ast
     return [type,children.to_ast] unless children.is_a? Array
     return [type,children.first.to_ast] if children.size == 1
@@ -20,10 +34,14 @@ end
 
 class TerminalNode
   attr_accessor :text
-  attr_accessor :start_index, :end_index
     
   def initialize(text)
     self.text = text
+  end
+  
+  def build(builder)
+    return builder.send(text) if builder.respond_to?(text)
+    text
   end
   
   def to_ast
