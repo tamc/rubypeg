@@ -93,11 +93,13 @@ class OriginalPeg < PegLeg
   end
   
   def element
-    bracketed_expression || identifier || terminal_string || terminal_regexp || any_character
+    bracketed_expression || identifier || terminal_string || terminal_regexp || terminal_character_range || any_character
   end
   
   def bracketed_expression
-     open_bracket && expression && close_bracket
+    node :bracketed_expression do
+      open_bracket && expression && close_bracket
+    end
   end
   
   def open_bracket
@@ -121,9 +123,15 @@ class OriginalPeg < PegLeg
   def double_quoted_string
     ignore { terminal('"') } && terminal(/[^"]*/) && ignore { terminal('"') } && spacing
   end
-  
+
   def terminal_regexp
     node :terminal_regexp do
+      ignore { terminal('/') } && terminal(/(\\\/|[^\x2f])*/) && ignore { terminal('/') } && spacing
+    end
+  end
+  
+  def terminal_character_range
+    node :terminal_character_range do
       terminal(/\[[a-zA-Z\-0-9]*\]/) && spacing
     end
   end
