@@ -25,5 +25,5 @@ single_quoted_string             = `"'" /[^']*/ `"'" spacing
 terminal_character_range        := /\[[a-zA-Z\-0-9]*\]/ spacing
 terminal_regexp                 := `'/' /(\\\/|[^\x2f])*/ `'/' spacing
 any_character                   := `'.' spacing
-end_of_line                      = `/[\n\r]+/
+end_of_line                      = `/[\n\r]+|\z/
 spacing                          = `/[ \t]*/

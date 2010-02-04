@@ -149,7 +149,7 @@ class TextPeg < RubyPeg
   end
   
   def end_of_line
-    ignore { terminal(/[\n\r]+/) }
+    ignore { terminal(/[\n\r]+|\z/) }
   end
   
   def spacing
