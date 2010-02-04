@@ -1,9 +1,14 @@
 require 'ruby_peg'
 
-class ArithmeticPeg < RubyPeg
+class Arithmetic < RubyPeg
+  
   def root
-    node :expression do
-      one_or_more {expression}
+    arithmetic
+  end
+  
+  def arithmetic
+    node :arithmetic do
+      one_or_more { expression } && ignore { terminal(/\z/) }
     end
   end
   
@@ -13,39 +18,40 @@ class ArithmeticPeg < RubyPeg
   
   def brackets
     node :brackets do
-      ignore { terminal("(") } && expression && ignore { terminal(")")}
+      ignore { terminal("(") } && spacing && expression && spacing && ignore { terminal(")") }
     end
   end
   
   def multiplication
     node :multiplication do
-      operation('*')
+      (brackets || number) && spacing && ignore { terminal("*") } && spacing && expression
     end
   end
   
   def division
-    node :division do 
-      operation('/')
+    node :division do
+      (brackets || number) && spacing && ignore { terminal("/") } && spacing && expression
     end
   end
   
   def addition
     node :addition do
-      operation('+')
+      (brackets || number) && spacing && ignore { terminal("+") } && spacing && expression
     end
   end
   
   def subtraction
-    node :subtraction do 
-      operation('-')
+    node :subtraction do
+      (brackets || number) && spacing && ignore { terminal("-") } && spacing && expression
     end
   end
   
-  def operation(type)
-    (brackets || number) && ignore { terminal(type) } && (expression)
+  def number
+    terminal(/[-+]?[0-9]+\.?[0-9]*([eE][-+]?[0-9]+)?/)
   end
   
-  def number
-    terminal /[-+]?[0-9]+\.?[0-9]*([eE][-+]?[0-9]+)?/
+  def spacing
+    ignore { terminal(/[ \t]*/) }
   end
+  
 end

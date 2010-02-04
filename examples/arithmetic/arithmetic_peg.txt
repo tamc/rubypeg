@@ -1,0 +1,9 @@
+arithmetic      := expression+ `/\z/
+expression       = subtraction | addition | division | multiplication | brackets | number
+brackets        := `"(" spacing expression spacing `")"
+multiplication  := (brackets | number ) spacing `'*' spacing expression
+division        := (brackets | number ) spacing `'/' spacing expression
+addition        := (brackets | number ) spacing `'+' spacing expression
+subtraction     := (brackets | number ) spacing `'-' spacing expression
+number           = /[-+]?[0-9]+\.?[0-9]*([eE][-+]?[0-9]+)?/
+spacing          = `/[ \t]*/
