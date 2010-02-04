@@ -42,19 +42,6 @@ describe EmptyPegBuilder do
   end
 end
 
-class TerminalPegBuilder
-  
-  def x
-    'y'
-  end
-  
-end
-
-describe EmptyPegBuilder do
-  it "demonstrates the way that terminals optionally call methods on the builder to be converted" do
-    SimplePeg.parse("one2xxx").build(TerminalPegBuilder.new).should == ['one','2',['y','y','y']]
-  end
-end
 
 class NonTerminalPegBuilder
   

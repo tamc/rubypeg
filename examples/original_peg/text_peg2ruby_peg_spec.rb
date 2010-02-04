@@ -1,14 +1,14 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.])
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
 require 'peg_leg'
-require 'original_peg'
-require 'peg2ruby'
+require 'text_peg'
+require 'text_peg2ruby_peg'
 
-describe Peg2Ruby do
+describe TextPeg2RubyPeg do
 
   def check(input,output)
-    ruby = Peg2Ruby.new
-    p peg = OriginalPeg.parse(input)
+    ruby = TextPeg2RubyPeg.new
+    peg = TextPeg.parse(input)
     peg.build(ruby)
     ruby.to_ruby.should == output
   end  
@@ -191,6 +191,28 @@ END
     check input, output
     end
 
+    it "creates terminal strings, escaping where relevant" do
+input = <<END
+  one = '"'
+END
+output = <<END
+require 'peg_leg'
+
+class One < PegLeg
+  
+  def root
+    one
+  end
+  
+  def one
+    terminal("\\"")
+  end
+  
+end
+END
+    check input, output
+    end
+
     it "creates terminal character ranges" do
 input = <<END
   one = [a-z]
@@ -234,5 +256,16 @@ end
 END
     check input, output
     end
+
+it "parses its own grammar" do
+  input = IO.readlines(File.join(File.dirname(__FILE__),'./text_peg.txt')).join
+  ruby = TextPeg2RubyPeg.new
+  peg = TextPeg.parse(input)
+  peg.build(ruby)
+  r = ruby.to_ruby
+  File.open(File.join(File.dirname(__FILE__),'./compiled_text_peg.rb'),'w') { |f| f.puts r }
+  r.should_not == nil
+end
+
 
 end

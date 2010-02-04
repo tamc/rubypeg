@@ -1,9 +1,9 @@
 require 'peg_leg'
 
-class OriginalPeg < PegLeg
+class TextPeg < PegLeg
   
   def root
-    node :grammar do 
+    node :text_peg do 
       any_number_of { spacing && ( nodes || definitions ) }
     end
   end
@@ -21,15 +21,17 @@ class OriginalPeg < PegLeg
   end
   
   def identifier
-    terminal(/[a-zA-Z_][a-zA-Z0-9]*/) && spacing
+    node :identifier do
+      terminal(/[a-zA-Z_][a-zA-Z0-9_]*/) && spacing
+    end
   end
   
   def assigns
-    ignore { terminal(':=') } && spacing
+    ignore { terminal(":=") } && spacing
   end
   
   def equals
-    ignore { terminal('=') } && spacing
+    ignore { terminal("=") } && spacing
   end
   
   def expression
@@ -49,7 +51,7 @@ class OriginalPeg < PegLeg
   end
 
   def divider
-    ignore { terminal('|') } && spacing
+    ignore { terminal("|") } && spacing
   end
   
   def elements
@@ -58,37 +60,37 @@ class OriginalPeg < PegLeg
   
   def ignored
     node :ignored do 
-      ignore { terminal('`') } && element
+      ignore { terminal("`") } && element
     end
   end
   
   def negative_lookahead_element
     node :not_followed_by do
-      ignore { terminal('!') } && element
+      ignore { terminal("!") } && element
     end
   end
   
   def positive_lookahead_element
     node :followed_by do
-      ignore { terminal('&') } && element
+      ignore { terminal("&") } && element
     end
   end
   
   def optional_element
     node :optional do 
-      element && ignore { terminal('?') }
+      element && ignore { terminal("?") }
     end
   end
   
   def any_number_of_element
     node :any_number_of do 
-      element && ignore { terminal('*') }
+      element && ignore { terminal("*") }
     end
   end
   
   def one_or_more_element
     node :one_or_more do
-      element && ignore { terminal('+') }
+      element && ignore { terminal("+") }
     end
   end
   
@@ -117,16 +119,16 @@ class OriginalPeg < PegLeg
   end
     
   def single_quoted_string
-    ignore { terminal("'") } && terminal(/[^'']*/) && ignore { terminal("'") } && spacing
+    ignore { terminal("'") } && terminal(/[^']*/) && ignore { terminal("'") } && spacing
   end
   
   def double_quoted_string
-    ignore { terminal('"') } && terminal(/[^"]*/) && ignore { terminal('"') } && spacing
+    ignore { terminal("\"") } && terminal(/[^"]*/) && ignore { terminal("\"") } && spacing
   end
 
   def terminal_regexp
     node :terminal_regexp do
-      ignore { terminal('/') } && terminal(/(\\\/|[^\x2f])*/) && ignore { terminal('/') } && spacing
+      ignore { terminal("/") } && terminal(/(\\\/|[^\x2f])*/) && ignore { terminal("/") } && spacing
     end
   end
   
@@ -138,7 +140,7 @@ class OriginalPeg < PegLeg
   
   def any_character
     node :any_character do 
-      ignore { terminal('.') } && spacing
+      ignore { terminal(".") } && spacing
     end
   end
   

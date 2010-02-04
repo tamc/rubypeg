@@ -16,14 +16,19 @@ class String
   
 end
 
-class Peg2Ruby
+class TextPeg2RubyPeg
   
   attr_accessor :ruby,:tabs
   
-  def initialize
+  RESERVED_WORDS = %w{index text_to_parse cache sequences parse ignore any_character optional one_or_more any_number_of sequence followed_by not_followed_by uncached_terminal uncached_node terminal node put_in_sequence cached? cached cache pretty_print_cache}
+    
+  def identifier(name)
+    return name.to_s unless RESERVED_WORDS.include?(name.to_s)
+    puts "Identifier #{name} clashes with a reserved word in the parser, replacing with _#{name}"
+    "_#{name}"
   end
   
-  def grammar(*definitions)
+  def text_peg(*definitions)
     self.ruby = []
     @tabs = 0
     @first_definition = true
@@ -31,12 +36,13 @@ class Peg2Ruby
     close_class
   end
   
-  def definition(name,expression)
+  def definition(identifier,expression)
+    non_clashing_name = identifier.build(self)
     if @first_definition
-      define_class(name.text) 
-      define_root(name.text)
+      define_class non_clashing_name
+      define_root non_clashing_name
     end
-    line "def #{name.text.to_method_name}"
+    line "def #{non_clashing_name.to_method_name}"
     indent
     line expression.build(self)
     outdent
@@ -44,14 +50,16 @@ class Peg2Ruby
     line
   end
   
-  def node(name,expression)
+  def node(identifier,expression)
+    original_name = identifier.to_s
+    non_clashing_name = identifier.build(self)
     if @first_definition
-      define_class(name.text) 
-      define_root(name.text)
+      define_class non_clashing_name
+      define_root non_clashing_name
     end
-    line "def #{name.text.to_method_name}"
+    line "def #{non_clashing_name.to_method_name}"
     indent
-    line "node :#{name.text.to_method_name} do"
+    line "node :#{original_name.to_method_name} do"
     indent
     line expression.build(self)
     outdent
@@ -116,10 +124,9 @@ class Peg2Ruby
   end
   
   def terminal_string(string)
-    %Q{terminal("#{string.build(self)}")}
+    %Q{terminal(#{string.build(self).inspect})}
   end
 
-  
   def terminal_regexp(regexp)
     "terminal(/#{regexp.build(self)}/)"
   end

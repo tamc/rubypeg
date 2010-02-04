@@ -29,7 +29,7 @@ class NonTerminalNode
   end
 
   def inspect; "[#{type},#{children.map(&:inspect).join(',')}]" end
-  alias :to_s :to_ast
+  def to_s; children.map(&:to_s).join end
 end
 
 class TerminalNode
@@ -40,7 +40,6 @@ class TerminalNode
   end
   
   def build(builder)
-    return builder.send(text) if builder.respond_to?(text)
     text
   end
   
@@ -54,22 +53,22 @@ end
 
 class PegLeg
   
-  def self.parse(text)
-    self.new.parse(text)
+  def self.parse(text_to_parse)
+    self.new.parse(text_to_parse)
   end
   
-  def self.parse_and_dump(text)
+  def self.parse_and_dump(text_to_parse)
     e = new
-    r = e.parse(text)
+    r = e.parse(text_to_parse)
     e.pretty_print_cache
     r
   end
   
-  attr_accessor :index, :text, :cache, :sequences
+  attr_accessor :index, :text_to_parse, :cache, :sequences
   
-  def parse(text)
+  def parse(text_to_parse)
     self.index = 0
-    self.text = text
+    self.text_to_parse = text_to_parse
     self.cache = {}
     self.sequences = [[]]
     root
@@ -139,12 +138,12 @@ class PegLeg
   def uncached_terminal(t)
     case t
     when String
-      if self.index == text.index(t,self.index)
+      if self.index == text_to_parse.index(t,self.index)
         self.index = self.index + t.size
         return TerminalNode.new(t)
       end
     when Regexp
-      if self.index == text.index(t,self.index)
+      if self.index == text_to_parse.index(t,self.index)
         match = Regexp.last_match
         self.index = match.end(0)
         return TerminalNode.new(match[0])
@@ -205,8 +204,8 @@ class PegLeg
   end
   
   def pretty_print_cache
-    (0...text.size).each do |i|
-      print "#{text[i].inspect[1...-1]}\t#{i}\t"
+    (0...text_to_parse.size).each do |i|
+      print "#{text_to_parse[i].inspect[1...-1]}\t#{i}\t"
       @cache.each do |name,indexes|
         result = indexes[i]
         print "[#{name.inspect},#{result.first.inspect}] " if result
