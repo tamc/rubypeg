@@ -267,5 +267,4 @@ it "parses its own grammar" do
   r.should_not == nil
 end
 
-
 end

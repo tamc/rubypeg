@@ -2,6 +2,7 @@ $:.unshift File.join(File.dirname(__FILE__), *%w[.])
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
 require 'peg_leg'
 require 'compiled_text_peg'
+require 'text_peg2ruby_peg'
 
 describe TextPeg do
   
@@ -115,9 +116,13 @@ END
 TextPeg.parse(input).to_ast.should == [:text_peg,[:definition,[:identifier,"one"],[:sequence,[:ignored,[:terminal_string,"one"]],[:followed_by,[:terminal_string,"two"]]]]]
 end
 
-it "parses its own grammar" do
+it "parses its own grammar and produces identical ruby code" do
   input = IO.readlines(File.join(File.dirname(__FILE__),'./text_peg.txt')).join
-  o = TextPeg.parse(input)
-  o.should_not == nil
+  output = IO.readlines(File.join(File.dirname(__FILE__),'./compiled_text_peg.rb')).join
+  ruby = TextPeg2RubyPeg.new
+  peg = TextPeg.parse(input)
+  peg.build(ruby)
+  r = ruby.to_ruby
+  r.should == output
 end
 end
