@@ -24,7 +24,7 @@ class TextPeg2RubyPeg
     
   def identifier(name)
     return name.to_s unless RESERVED_WORDS.include?(name.to_s)
-    puts "Identifier #{name} clashes with a reserved word in the parser, replacing with _#{name}"
+    $stderr.puts "Identifier #{name} clashes with a reserved word in the parser, replacing with _#{name}"
     "_#{name}"
   end
   

@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+require 'optparse'
+
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
+require 'text_peg2ruby_peg'
+require 'text_peg'
+require 'ruby_peg'
+
+if ARGV[0]
+  input = IO.readlines(ARGV[0]).join
+  ruby = TextPeg2RubyPeg.new
+  peg = TextPeg.parse(input)
+  peg.build(ruby)
+  if ARGV[1]
+    File.open(ARGV[1],'w') { |f| f.puts ruby.to_ruby }
+  else
+    $stdout.puts ruby.to_ruby
+  end
+else
+  $stdout.puts "Usage:   text-peg2ruby-peg [text-peg-input-filename] [ruby-peg-output-filename]"
+  $stdout.puts "Help:    Compiles text format parsing expression grammars into a ruby parser."
+  $stdout.puts "         See http://github.com/tamc/ruby-peg for more information."
+  $stdout.puts "Version: 0.0.1"
+end
