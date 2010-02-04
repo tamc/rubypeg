@@ -259,12 +259,12 @@ END
 
 it "parses its own grammar" do
   input = IO.readlines(File.join(File.dirname(__FILE__),'../lib/text_peg.txt')).join
+  output = IO.readlines(File.join(File.dirname(__FILE__),'../lib/text_peg.rb')).join
   ruby = TextPeg2RubyPeg.new
   peg = TextPeg.parse(input)
   peg.build(ruby)
   r = ruby.to_ruby
-  # File.open(File.join(File.dirname(__FILE__),'../lib/compiled_text_peg.rb'),'w') { |f| f.puts r }
-  r.should_not == nil
+  r.should == output
 end
 
 end
