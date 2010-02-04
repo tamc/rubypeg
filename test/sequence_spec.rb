@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'peg_leg'
+require 'ruby_peg'
 
-class SimpleSequence < PegLeg
+class SimpleSequence < RubyPeg
   def root
     node :root do 
       terminal('x') && terminal('y') && terminal('z')
@@ -21,7 +21,7 @@ describe SimpleSequence do
   
 end
 
-class RepeatedSequence < PegLeg
+class RepeatedSequence < RubyPeg
   def root
     node :root do 
       any_number_of { terminal('1') && ignore { terminal('2') } && terminal('3') } &&  one_or_more { terminal('x') && terminal('y') && terminal('z') } && terminal('z')

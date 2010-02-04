@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'peg_leg'
+require 'ruby_peg'
 
-class TestLeg1 < PegLeg
+class TestLeg1 < RubyPeg
   def root
     node :grammar do
       optional_indent && grammar_keyword && space && grammar_name && newline && ignore {one_or_more { terminal('end') || terminal('END')}}

@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'peg_leg'
+require 'ruby_peg'
 
-class AnyCharacter < PegLeg
+class AnyCharacter < RubyPeg
   def root
     node :root do 
       any_character

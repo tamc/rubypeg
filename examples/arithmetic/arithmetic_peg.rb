@@ -1,6 +1,6 @@
-require 'peg_leg'
+require 'ruby_peg'
 
-class ArithmeticPeg < PegLeg
+class ArithmeticPeg < RubyPeg
   def root
     node :expression do
       one_or_more {expression}

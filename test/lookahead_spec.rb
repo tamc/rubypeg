@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'peg_leg'
+require 'ruby_peg'
 
-class TestNegativeLookahead < PegLeg
+class TestNegativeLookahead < RubyPeg
   def root
     node :root do 
       one_or_more { negative || word || space }
@@ -41,7 +41,7 @@ describe TestNegativeLookahead do
   end
 end
 
-class TestPositiveLookahead < PegLeg
+class TestPositiveLookahead < RubyPeg
   def root
     node :root do 
       one_or_more {  noun || verb || adjective || adverb || word || space }

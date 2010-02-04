@@ -1,6 +1,6 @@
-require 'peg_leg'
+require 'ruby_peg'
 
-class TextPeg < PegLeg
+class TextPeg < RubyPeg
   
   def root
     text_peg

@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.])
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'peg_leg'
+require 'ruby_peg'
 require 'text_peg'
 require 'text_peg2ruby_peg'
 
@@ -13,14 +13,14 @@ describe TextPeg2RubyPeg do
     ruby.to_ruby.should == output
   end  
 
-  it "creates a class that extends PegLeg and is named after the first rule" do
+  it "creates a class that extends RubyPeg and is named after the first rule" do
 input = <<END
   one = .
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -40,9 +40,9 @@ input = <<END
   one = . . .
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -62,9 +62,9 @@ input = <<END
   one = . | . | .
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -84,9 +84,9 @@ input = <<END
   one = (. .) | .
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -106,9 +106,9 @@ input = <<END
   one := . . .
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -130,9 +130,9 @@ input = <<END
   one = !. &. `.
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -152,9 +152,9 @@ input = <<END
   one = .? .+ .*
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -174,9 +174,9 @@ input = <<END
   one = "one"
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -196,9 +196,9 @@ input = <<END
   one = '"'
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -218,9 +218,9 @@ input = <<END
   one = [a-z]
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one
@@ -240,9 +240,9 @@ input = <<END
   one = /one/
 END
 output = <<END
-require 'peg_leg'
+require 'ruby_peg'
 
-class One < PegLeg
+class One < RubyPeg
   
   def root
     one

@@ -51,7 +51,7 @@ class TerminalNode
   def to_s; text.to_s end
 end
 
-class PegLeg
+class RubyPeg
   
   def self.parse(text_to_parse)
     self.new.parse(text_to_parse)

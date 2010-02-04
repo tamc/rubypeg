@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'peg_leg'
+require 'ruby_peg'
 
-class OneOrMore < PegLeg
+class OneOrMore < RubyPeg
   def root
     node :root do 
       one_or_more { terminal('x') }
@@ -25,7 +25,7 @@ describe OneOrMore do
   
 end
 
-class ZeroOrMore < PegLeg
+class ZeroOrMore < RubyPeg
   def root
     node :root do 
       any_number_of { terminal('x') }
@@ -49,7 +49,7 @@ describe ZeroOrMore do
   
 end
 
-class ZeroOrOne < PegLeg
+class ZeroOrOne < RubyPeg
   def root
     node :root do 
       optional { terminal('x') }

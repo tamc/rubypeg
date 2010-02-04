@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.])
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
-require 'peg_leg'
+require 'ruby_peg'
 require 'compiled_text_peg'
 require 'text_peg2ruby_peg'
 

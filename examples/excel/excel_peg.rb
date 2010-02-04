@@ -1,4 +1,4 @@
-require 'peg_leg'
+require 'ruby_peg'
 
 module ExcelReferencePeg
   def any_reference
@@ -105,7 +105,7 @@ module NumberPeg
   
 end
 
-class ExcelPeg < PegLeg
+class ExcelPeg < RubyPeg
   include ExcelReferencePeg
   include ExcelStringPeg
   include NumberPeg

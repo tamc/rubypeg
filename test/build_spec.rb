@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'peg_leg'
+require 'ruby_peg'
 
-class SimplePeg < PegLeg
+class SimplePeg < RubyPeg
   def root
     node :root do 
       one && two && three

@@ -70,9 +70,9 @@ class TextPeg2RubyPeg
   end
   
   def define_class(name)
-    line "require 'peg_leg'"
+    line "require 'ruby_peg'"
     line ""
-    line "class #{name.to_class_name} < PegLeg"
+    line "class #{name.to_class_name} < RubyPeg"
     indent
     line
     @first_definition  = false
