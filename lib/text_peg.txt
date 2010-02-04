@@ -27,5 +27,3 @@ terminal_regexp                 := `'/' /(\\\/|[^\x2f])*/ `'/' spacing
 any_character                   := `'.' spacing
 end_of_line                      = `/[\n\r]+/
 spacing                          = `/[ \t]*/
-
-

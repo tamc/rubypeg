@@ -1,5 +1,5 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.])
-$:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 require 'peg_leg'
 require 'text_peg'
 
@@ -116,7 +116,7 @@ TextPeg.parse(input).to_ast.should == [:text_peg,[:definition,[:identifier,"one"
 end
 
 it "parses its own grammar" do
-  input = IO.readlines(File.join(File.dirname(__FILE__),'./text_peg.txt')).join
+  input = IO.readlines(File.join(File.dirname(__FILE__),'../lib/text_peg.txt')).join
   o = TextPeg.parse(input)
   o.should_not == nil
 end
