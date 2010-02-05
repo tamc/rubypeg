@@ -18,7 +18,22 @@ end
 
 class TextPeg2RubyPeg
   
-  attr_accessor :ruby,:tabs
+  def TextPeg2RubyPeg.parse_to_ruby(text_peg)
+    TextPeg.parse(text_peg).build(TextPeg2RubyPeg.new)
+  end
+  
+  def TextPeg2RubyPeg.parse_to_loaded_class(text_peg)
+    builder = TextPeg2RubyPeg.new
+    ruby =  TextPeg.parse(text_peg).build(builder)
+    Kernel.eval(ruby)
+    Kernel.eval(builder.class_name)
+  end
+  
+  def TextPeg2RubyPeg.parse_file_to_loaded_class(filename)
+    parse_to_loaded_class IO.readlines(filename).join
+  end
+  
+  attr_accessor :ruby,:tabs,:class_name
   
   RESERVED_WORDS = %w{index text_to_parse cache sequences parse ignore any_character optional one_or_more any_number_of sequence followed_by not_followed_by uncached_terminal uncached_node terminal node put_in_sequence cached? cached cache pretty_print_cache}
     
@@ -30,15 +45,15 @@ class TextPeg2RubyPeg
   
   def text_peg(*definitions)
     self.ruby = []
-    @tabs = 0
-    @first_definition = true
+    self.tabs = 0
     definitions.map { |d| d.build(self) }
     close_class
+    to_ruby
   end
   
   def definition(identifier,expression)
     non_clashing_name = identifier.build(self)
-    if @first_definition
+    unless class_name
       define_class non_clashing_name
       define_root non_clashing_name
     end
@@ -53,7 +68,7 @@ class TextPeg2RubyPeg
   def node(identifier,expression)
     original_name = identifier.to_s
     non_clashing_name = identifier.build(self)
-    if @first_definition
+    unless class_name
       define_class non_clashing_name
       define_root non_clashing_name
     end
@@ -70,9 +85,10 @@ class TextPeg2RubyPeg
   end
   
   def define_class(name)
+    self.class_name = name.to_class_name
     line "require 'ruby_peg'"
     line ""
-    line "class #{name.to_class_name} < RubyPeg"
+    line "class #{class_name} < RubyPeg"
     indent
     line
     @first_definition  = false

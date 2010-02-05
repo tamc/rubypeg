@@ -257,6 +257,38 @@ END
     check input, output
     end
 
+it "has a helper class method parse_to_ruby(text_peg) that does the parsing and compiling in one shot" do
+input = <<END
+  one = /one/
+END
+output = <<END
+require 'ruby_peg'
+
+class One < RubyPeg
+  
+  def root
+    one
+  end
+  
+  def one
+    terminal(/one/)
+  end
+  
+end
+END
+TextPeg2RubyPeg.parse_to_ruby(input).should == output  
+end
+
+it "has a helper class method parse_to_loaded_class(text_peg) that parses the text peg, compiles it to ruby and then evaluates it so it is immediately available" do
+parser = TextPeg2RubyPeg.parse_to_loaded_class("one := /one/")
+parser.parse("one").to_ast.should == [:one,"one"]
+end
+
+it "has a helper class method parse_file_to_loaded_class(filename) that loads a text peg then parses and compiles it to ruby before evaluating it so that it is immediately available" do
+parser = TextPeg2RubyPeg.parse_file_to_loaded_class(File.join(File.dirname(__FILE__),'../lib/text_peg.txt'))
+parser.parse("one := /one/").to_ast.should == [:text_peg, [:node, [:identifier, "one"], [:sequence, [:terminal_regexp, "one"]]]]
+end
+
 it "parses its own grammar" do
   input = IO.readlines(File.join(File.dirname(__FILE__),'../lib/text_peg.txt')).join
   output = IO.readlines(File.join(File.dirname(__FILE__),'../lib/text_peg.rb')).join
