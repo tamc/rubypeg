@@ -1,0 +1,21 @@
+formula                         := (string_join | thing )+
+thing                            = string | any_reference | percentage | number
+string_join                     := thing (`"&" thing)+
+string                          := `'"' /[^"]*/ `'"'
+any_reference                    = quoted_sheet_reference | sheet_reference | sheetless_reference
+percentage                      := /[-+]?[0-9]+\.?[0-9]*%/
+number                          := /[-+]?[0-9]+\.?[0-9]*([eE][-+]?[0-9]+)?/
+quoted_sheet_reference          := single_quoted_string sheet_separator sheetless_reference
+sheet_reference                 := /[a-zA-Z][\w_]+/ sheet_separator sheetless_reference
+single_quoted_string             = `"'" /[^']*/ `"'"
+sheet_separator                  = `'!'
+sheetless_reference              = column_range | row_range | area | cell
+column_range                    := column range_separator column
+row_range                       := row range_separator row
+area                            := reference range_separator reference
+cell                            := reference
+range_separator                  = `':'
+row                              = /\$?\d+/
+column                           = /\$?[A-Z]+/
+reference                        = /\$?[A-Z]+\$?[0-9]+/
+
