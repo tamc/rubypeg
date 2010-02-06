@@ -1,3 +1,5 @@
+require 'text_peg'
+
 class String
   
   def to_class_name
