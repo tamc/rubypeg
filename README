@@ -1,0 +1,5 @@
+h1. Ruby-peg
+
+This software is Copyright 2010 Green on Black Ltd and distributed under the open source "MIT licence":http://www.opensource.org/licenses/mit-license.php.
+
+Ruby-peg is for creating readable Parsing Expression Grammars (PEG) in ruby.
