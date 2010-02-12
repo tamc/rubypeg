@@ -25,6 +25,20 @@ class MultipleChildNonTerminalNodeTest < RubyPeg
   end
 end
 
+class CustomNode
+  def initialize(children)
+    # ignored
+  end
+end
+
+class CustomNodeNonTerminalNodeTest < RubyPeg
+  def root
+    node CustomNode do
+      terminal("one")
+    end
+  end 
+end
+
 class CreateNonTerminalNodeTest < NonTerminalNodeTest
   
   def create_non_terminal_node(type,children)
@@ -42,15 +56,15 @@ describe NonTerminalNodeTest do
     parse("two").should == nil
   end
   
-  it "non terminals are, by default, instances of NonTerminalNode" do
+  it "if a symbol is passed to the node method then non terminals are, by default, instances of NonTerminalNode" do
     parse("one").should be_kind_of(NonTerminalNode)
   end
   
-  it "these have a type attribute that returns the symbol used as an argument to the node call" do
+  it "NonTerminalNode instances have a type attribute that returns the symbol used as an argument to the node call" do
     parse("one").type.should == :one
   end  
   
-  it "these have a children attribute that contains an array of child nodes to this one" do
+  it "NonTerminalNode instances have a children attribute that contains an array of child nodes to this one" do
     parse("one").children.should be_kind_of(Array)
     parse("one").children.first.should be_kind_of(TerminalNode)
     parse("one").children.first.to_s.should == "one"
@@ -60,18 +74,18 @@ describe NonTerminalNodeTest do
     ChildlessNonTerminalNodeTest.parse("one").children.should == []
   end
   
-  it "TerminalNode responds to to_ast by returning [:type,*children]" do
+  it "NonTerminalNode instances respond to to_ast by returning [:type,*children]" do
     parse("one").to_ast.should be_kind_of(Array)
     parse("one").to_ast.should == [:one,"one"]
     MultipleChildNonTerminalNodeTest.parse("onetwo").to_ast.should == [:one,"one","two"]
   end
   
-  it "TerminalNode responds to to_ast by returning [:type] if there are no children" do
+  it "NonTerminalNode instances respond to to_ast by returning [:type] if there are no children" do
     ChildlessNonTerminalNodeTest.parse("one").to_ast.should be_kind_of(Array)
     ChildlessNonTerminalNodeTest.parse("one").to_ast.should == [:one]
   end
   
-  it "TerminalNode responds to build(builder) by trying to call a method with the same name on the builder and with its children as arguments" do
+  it "NonTerminalNode instances respond to build(builder) by trying to call a method with the same name on the builder and with its children as arguments" do
     builder = mock(:TestBuilder)
     builder.should_receive(:one).with {|a| a.kind_of?(TerminalNode) && a.to_s == "one"}.and_return(1)
     parse("one").build(builder).should == 1
@@ -94,6 +108,8 @@ describe NonTerminalNodeTest do
     result.last.should == "one"
   end
   
-  
+  it "if a class is passed to the node method then a class of that type is created as the non-terminal. Its initializer must take an array of children as its argument" do
+    CustomNodeNonTerminalNodeTest.parse("one").should be_kind_of(CustomNode)
+  end
   
 end

@@ -155,6 +155,7 @@ class RubyPeg
   end
   
   def create_non_terminal_node(type,children)
+    return type.new(children) if type.is_a?(Class)
     NonTerminalNode.new(type,children)
   end
   
