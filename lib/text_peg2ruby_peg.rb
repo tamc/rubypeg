@@ -37,7 +37,7 @@ class TextPeg2RubyPeg
   
   attr_accessor :ruby,:tabs,:class_name
   
-  RESERVED_WORDS = %w{index text_to_parse cache sequences parse ignore any_character optional one_or_more any_number_of sequence followed_by not_followed_by uncached_terminal uncached_terminal_regexp uncached_terminal_string create_terminal_node uncached_node terminal node put_in_sequence cached? cached cache pretty_print_cache}
+  RESERVED_WORDS = %w{index text_to_parse cache sequences parse ignore any_character optional one_or_more any_number_of sequence followed_by not_followed_by uncached_terminal uncached_terminal_regexp uncached_terminal_string create_terminal_node create_non_terminal_node uncached_node terminal node put_in_sequence cached? cached cache pretty_print_cache}
     
   def identifier(name)
     return name.to_s unless RESERVED_WORDS.include?(name.to_s)

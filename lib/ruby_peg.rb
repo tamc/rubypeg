@@ -8,24 +8,13 @@ class NonTerminalNode
   end
   
   def build(builder)
-    if builder.respond_to?(type)      
-      return builder.send(type) unless children
-      return builder.send(type,children) unless children.is_a?(Array)
-      return builder.send(type,children.first) if children.size == 1
-      return builder.send(type,*children)
-    else
-      return type unless children
-      return children.build(builder) unless children.is_a?(Array)
-      return children.first.build(builder) if children.size == 1
-      return children.map { |c| c.build(builder) }      
-    end
+    return builder.send(type,*children) if builder.respond_to?(type)      
+    return children.first.build(builder) if children.size == 1
+    children.map { |c| c.build(builder) }      
   end
   
   def to_ast
-    return [type,children.to_ast] unless children.is_a? Array
-    return [type,children.first.to_ast] if children.size == 1
-    return [type,*children.map(&:to_ast)] if children.size >= 1
-    return [type]
+    [type,*children.map(&:to_ast)]
   end
 
   def inspect; "[#{type},#{children.map(&:inspect).join(',')}]" end
@@ -160,16 +149,13 @@ class RubyPeg
   def uncached_node(type,&block)
     start_index = self.index
     results = sequence(&block)
-    if results
-      if results.is_a?(Array) && (results.size == 1) && results.first.is_a?(Array)
-        return NonTerminalNode.new(type,results.first)
-      else
-        return NonTerminalNode.new(type,results)
-      end
-    else
-      self.index = start_index
-      return nil
-    end
+    return create_non_terminal_node(type,results) if results
+    self.index = start_index
+    return nil
+  end
+  
+  def create_non_terminal_node(type,children)
+    NonTerminalNode.new(type,children)
   end
   
   def terminal(t)
