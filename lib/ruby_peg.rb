@@ -136,20 +136,25 @@ class RubyPeg
   end
   
   def uncached_terminal(t)
-    case t
-    when String
-      if self.index == text_to_parse.index(t,self.index)
-        self.index = self.index + t.size
-        return TerminalNode.new(t)
-      end
-    when Regexp
-      if self.index == text_to_parse.index(t,self.index)
-        match = Regexp.last_match
-        self.index = match.end(0)
-        return TerminalNode.new(match[0])
-      end
-    end
-    return nil
+    return uncached_terminal_regexp(t) if t.is_a? Regexp
+    uncached_terminal_string(t.to_s)
+  end
+  
+  def uncached_terminal_regexp(t)
+    return nil unless self.index == text_to_parse.index(t,self.index)
+    match = Regexp.last_match
+    self.index = match.end(0)
+    create_terminal_node match[0]
+  end
+  
+  def uncached_terminal_string(t)
+    return nil unless self.index == text_to_parse.index(t,self.index)
+    self.index = self.index + t.size
+    create_terminal_node t
+  end
+  
+  def create_terminal_node(text)
+    TerminalNode.new(text)
   end
   
   def uncached_node(type,&block)
