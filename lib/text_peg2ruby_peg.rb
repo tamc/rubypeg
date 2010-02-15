@@ -20,32 +20,33 @@ end
 
 class TextPeg2RubyPeg
   
+
   def TextPeg2RubyPeg.parse_to_ruby(text_peg)
     TextPeg.parse(text_peg).build(TextPeg2RubyPeg.new)
   end
-  
+
   def TextPeg2RubyPeg.parse_to_loaded_class(text_peg)
     builder = TextPeg2RubyPeg.new
     ruby =  TextPeg.parse(text_peg).build(builder)
     Kernel.eval(ruby)
     Kernel.eval(builder.class_name)
   end
-  
+
   def TextPeg2RubyPeg.parse_file_to_loaded_class(filename)
     parse_to_loaded_class IO.readlines(filename).join
   end
   
-  attr_accessor :ruby,:tabs,:class_name
+  attr_accessor :ruby,:tabs,:class_name #:nodoc:
   
-  RESERVED_WORDS = %w{index text_to_parse cache sequences parse ignore any_character optional one_or_more any_number_of sequence followed_by not_followed_by uncached_terminal uncached_terminal_regexp uncached_terminal_string create_terminal_node create_non_terminal_node uncached_node terminal node put_in_sequence cached? cached cache pretty_print_cache}
-    
-  def identifier(name)
+  RESERVED_WORDS = %w{index text_to_parse cache sequences parse ignore any_character optional one_or_more any_number_of sequence followed_by not_followed_by uncached_terminal uncached_terminal_regexp uncached_terminal_string create_terminal_node create_non_terminal_node uncached_node terminal node put_in_sequence cached? cached cache pretty_print_cache}   #:nodoc:
+  
+  def identifier(name) #:nodoc:
     return name.to_s unless RESERVED_WORDS.include?(name.to_s)
     $stderr.puts "Identifier #{name} clashes with a reserved word in the parser, replacing with _#{name}"
     "_#{name}"
   end
   
-  def text_peg(*definitions)
+  def text_peg(*definitions) #:nodoc:
     self.ruby = []
     self.tabs = 0
     definitions.map { |d| d.build(self) }
@@ -53,7 +54,7 @@ class TextPeg2RubyPeg
     to_ruby
   end
   
-  def definition(identifier,expression)
+  def definition(identifier,expression) #:nodoc:
     non_clashing_name = identifier.build(self)
     unless class_name
       define_class non_clashing_name
@@ -67,7 +68,7 @@ class TextPeg2RubyPeg
     line
   end
   
-  def node(identifier,expression)
+  def node(identifier,expression) #:nodoc:
     original_name = identifier.to_s
     non_clashing_name = identifier.build(self)
     unless class_name
@@ -86,7 +87,7 @@ class TextPeg2RubyPeg
     line
   end
   
-  def define_class(name)
+  def define_class(name) #:nodoc:
     self.class_name = name.to_class_name
     line "require 'ruby_peg'"
     line ""
@@ -96,7 +97,7 @@ class TextPeg2RubyPeg
     @first_definition  = false
   end
   
-  def define_root(name)
+  def define_root(name) #:nodoc:
     line "def root"
     indent
     line name.to_method_name
@@ -105,76 +106,76 @@ class TextPeg2RubyPeg
     line
   end
   
-  def not_followed_by(element)
+  def not_followed_by(element) #:nodoc:
     "not_followed_by { #{element.build(self)} }"
   end
   
-  def followed_by(element)
+  def followed_by(element) #:nodoc:
     "followed_by { #{element.build(self)} }"
   end
   
-  def ignored(element)
+  def ignored(element) #:nodoc:
     "ignore { #{element.build(self)} }"
   end
     
-  def optional(element)
+  def optional(element) #:nodoc:
     "optional { #{element.build(self)} }"
   end
   
-  def one_or_more(element)
+  def one_or_more(element) #:nodoc:
     "one_or_more { #{element.build(self)} }"
   end
   
-  def any_number_of(element)
+  def any_number_of(element) #:nodoc:
     "any_number_of { #{element.build(self)} }"
   end
   
-  def sequence(*elements)
+  def sequence(*elements) #:nodoc:
     elements.map { |e| e.build(self) }.join(" && ")
   end
   
-  def alternatives(*elements)
+  def alternatives(*elements) #:nodoc:
     elements.map { |e| e.build(self) }.join(" || ")    
   end
   
-  def bracketed_expression(expression)
+  def bracketed_expression(expression) #:nodoc:
     "(#{expression.build(self)})"
   end
   
-  def terminal_string(string)
+  def terminal_string(string) #:nodoc:
     %Q{terminal(#{string.build(self).inspect})}
   end
 
-  def terminal_regexp(regexp)
+  def terminal_regexp(regexp) #:nodoc:
     "terminal(/#{regexp.build(self)}/)"
   end
   
-  def terminal_character_range(regexp)
+  def terminal_character_range(regexp) #:nodoc:
     "terminal(/#{regexp.build(self)}/)"
   end
   
-  def any_character
+  def any_character #:nodoc:
     "any_character"
   end
   
-  def close_class
+  def close_class #:nodoc:
     outdent
     line "end\n"
   end
   
-  def line(string = "")
+  def line(string = "") #:nodoc:
     ruby << "#{"  "*tabs}#{string}"
   end
   
-  def indent
+  def indent #:nodoc:
     self.tabs = tabs + 1
   end
   
-  def outdent
+  def outdent #:nodoc:
     self.tabs = tabs - 1
   end
   
-  def to_ruby
+  def to_ruby #:nodoc:
     ruby.join("\n")
   end
   
