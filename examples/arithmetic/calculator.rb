@@ -3,9 +3,9 @@ $:.unshift File.join(File.dirname(__FILE__), *%w[.])
 require 'ruby_peg'
 require 'arithmetic_peg'
 
-class TerminalNode
+module TerminalNode
   def build(builder)
-    text.to_f
+    self.to_f
   end
 end
 

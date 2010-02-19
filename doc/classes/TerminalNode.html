@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class: TerminalNode [Ruby PEG]</title>
+  <title>Module: TerminalNode [Ruby PEG]</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
@@ -45,7 +45,7 @@
     <div id="classHeader">
         <table class="header-table">
         <tr class="top-aligned-row">
-          <td><strong>Class</strong></td>
+          <td><strong>Module</strong></td>
           <td class="class-name-in-header">TerminalNode</td>
         </tr>
         <tr class="top-aligned-row">
@@ -66,15 +66,6 @@
         </tr>
 
 
-        <tr class="top-aligned-row">
-            <td><strong>Parent:</strong></td>
-            <td>
-
-                Object
-
-            </td>
-        </tr>
-
         </table>
     </div>
   <!-- banner header -->
@@ -91,15 +82,9 @@
 
       <div class="name-list">
 
-        <a href="#M000006">build</a>&nbsp;&nbsp;
+        <a href="#M000025">build</a>&nbsp;&nbsp;
 
-        <a href="#M000008">inspect</a>&nbsp;&nbsp;
-
-        <a href="#M000005">new</a>&nbsp;&nbsp;
-
-        <a href="#M000007">to_ast</a>&nbsp;&nbsp;
-
-        <a href="#M000009">to_s</a>&nbsp;&nbsp;
+        <a href="#M000026">to_ast</a>&nbsp;&nbsp;
 
       </div>
     </div>
@@ -112,71 +97,20 @@
 
 
 
-    <div id="attribute-list">
-      <h3 class="section-bar">Attributes</h3>
-
-      <div class="name-list">
-        <table>
-
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">text</td>
-
-          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
-
-          <td class="context-item-desc"></td>
-        </tr>
-
-        </table>
-      </div>
-    </div>
-
 
     <!-- if method_list -->
 
     <div id="methods">
 
-      <h3 class="section-bar">Public Class methods</h3>
-
-
-      <div id="method-M000005" class="method-detail">
-        <a name="M000005"></a>
-
-        <div class="method-heading">
-
-          <a href="#M000005" class="method-signature">
-
-          <span class="method-name">new</span><span class="method-args">(text)</span>
-
-          </a>
-
-        </div>
-
-        <div class="method-description">
-
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000005-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 136</span>
-136:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">text</span>)
-137:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">text</span> = <span class="ruby-identifier">text</span>
-138:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-
-        </div>
-      </div>
-
-
       <h3 class="section-bar">Public Instance methods</h3>
 
 
-      <div id="method-M000006" class="method-detail">
-        <a name="M000006"></a>
+      <div id="method-M000025" class="method-detail">
+        <a name="M000025"></a>
 
         <div class="method-heading">
 
-          <a href="#M000006" class="method-signature">
+          <a href="#M000025" class="method-signature">
 
           <span class="method-name">build</span><span class="method-args">(builder)</span>
 
@@ -187,13 +121,13 @@
         <div class="method-description">
 
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000006-source">
+            onclick="toggleCode('M000025-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000025-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 140</span>
-140:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span>)
-141:     <span class="ruby-identifier">text</span>
-142:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 131</span>
+131:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span>)
+132:     <span class="ruby-keyword kw">self</span>
+133:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
 
@@ -201,40 +135,12 @@
       </div>
 
 
-      <div id="method-M000008" class="method-detail">
-        <a name="M000008"></a>
+      <div id="method-M000026" class="method-detail">
+        <a name="M000026"></a>
 
         <div class="method-heading">
 
-          <a href="#M000008" class="method-signature">
-
-          <span class="method-name">inspect</span><span class="method-args">()</span>
-
-          </a>
-
-        </div>
-
-        <div class="method-description">
-
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000008-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 148</span>
-148:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>; <span class="ruby-identifier">text</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-
-        </div>
-      </div>
-
-
-      <div id="method-M000007" class="method-detail">
-        <a name="M000007"></a>
-
-        <div class="method-heading">
-
-          <a href="#M000007" class="method-signature">
+          <a href="#M000026" class="method-signature">
 
           <span class="method-name">to_ast</span><span class="method-args">()</span>
 
@@ -245,41 +151,13 @@
         <div class="method-description">
 
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000007-source">
+            onclick="toggleCode('M000026-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000026-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 144</span>
-144:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_ast</span>
-145:     <span class="ruby-identifier">text</span>
-146:   <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-
-        </div>
-      </div>
-
-
-      <div id="method-M000009" class="method-detail">
-        <a name="M000009"></a>
-
-        <div class="method-heading">
-
-          <a href="#M000009" class="method-signature">
-
-          <span class="method-name">to_s</span><span class="method-args">()</span>
-
-          </a>
-
-        </div>
-
-        <div class="method-description">
-
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000009-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 149</span>
-149:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>; <span class="ruby-identifier">text</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 135</span>
+135:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_ast</span>
+136:     <span class="ruby-keyword kw">self</span>
+137:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
 

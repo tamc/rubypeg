@@ -174,11 +174,11 @@ describe BasketPeg do
       end
       
       def item(number,kind)
-        @total = @total + (number.build(self).to_f * kind.build(self).to_f)
+        @total = @total + (number.to_f * kind.build(self).to_f)
       end
       
-      def fruit(kind)
-        case kind.build(self)
+      def fruit(kind_of_fruit)
+        case kind_of_fruit
         when "apple"; 3.0
         when "pear"; 1.0
         else  10.0
@@ -198,16 +198,14 @@ describe BasketPeg do
     basket.children.first.type.should == :item
     basket.children.first.children.class.should == Array
     basket.children.first.children.size.should == 2
-    basket.children.first.children.first.class.should == TerminalNode
-    basket.children.first.children.first.text == "1"
-    basket.children.first.children.first.class.should == TerminalNode
-    basket.children.first.children.first.text == "1"
+    basket.children.first.children.first.should be_kind_of(TerminalNode)
+    basket.children.first.children.first.should == "1"
     basket.children.first.children.last.class.should == NonTerminalNode
     basket.children.first.children.last.type == :fruit
     basket.children.first.children.last.children.class.should == Array
     basket.children.first.children.last.children.size.should == 1
-    basket.children.first.children.last.children.first.class.should == TerminalNode
-    basket.children.first.children.last.children.first.text.should == "apple"
+    basket.children.first.children.last.children.first.should be_kind_of(TerminalNode)
+    basket.children.first.children.last.children.first.should == "apple"
   end
   
 end

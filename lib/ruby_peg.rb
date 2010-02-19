@@ -55,16 +55,14 @@ class NonTerminalNode
   #   basket.children.first.type.should == :item
   #   basket.children.first.children.class.should == Array
   #   basket.children.first.children.size.should == 2
-  #   basket.children.first.children.first.class.should == TerminalNode
-  #   basket.children.first.children.first.text == "1"
-  #   basket.children.first.children.first.class.should == TerminalNode
-  #   basket.children.first.children.first.text == "1"
+  #   basket.children.first.children.first.should be_kind_of(TerminalNode)
+  #   basket.children.first.children.first.should == "1"
   #   basket.children.first.children.last.class.should == NonTerminalNode
   #   basket.children.first.children.last.type == :fruit
   #   basket.children.first.children.last.children.class.should == Array
   #   basket.children.first.children.last.children.size.should == 1
-  #   basket.children.first.children.last.children.first.class.should == TerminalNode
-  #   basket.children.first.children.last.children.first.text.should == "apple"
+  #   basket.children.first.children.last.children.first.should be_kind_of(TerminalNode)
+  #   basket.children.first.children.last.children.first.should == "apple"
   attr_accessor :children
   
   def initialize(type,children) #:nodoc:
@@ -82,6 +80,7 @@ class NonTerminalNode
   # children of the non terminal as arguments. If there isn't, then the build methods on the children
   # of this node ar recursively called.
   # E.g.,:
+  #   BasketPeg.parse("1 apple 2 apples 3 pears").build.should == [["1", "apple"], ["2", "apple"], ["3", "pear"]]
   #   class BasketPegBuilderExample
   #     attr_accessor :total
   #     
@@ -90,11 +89,11 @@ class NonTerminalNode
   #     end
   #     
   #     def item(number,kind)
-  #       @total = @total + (number.build(self).to_f * kind.build(self).to_f)
+  #       @total = @total + (number.to_f * kind.build(self).to_f)
   #     end
   #     
-  #     def fruit(kind)
-  #       case kind.build(self)
+  #     def fruit(kind_of_fruit)
+  #       case kind_of_fruit
   #       when "apple"; 3.0
   #       when "pear"; 1.0
   #       else  10.0
@@ -104,8 +103,6 @@ class NonTerminalNode
   #   counter = BasketPegBuilderExample.new
   #   BasketPeg.parse("1 apple 2 apples 3 pears").build(counter)
   #   counter.total.should == 12.0
-  #   BasketPeg.parse("10 apples").build(counter)
-  #   counter.total.should == 42.0
   def build(builder = nil)
     return builder.send(type,*children) if builder.respond_to?(type)
     return children.first.build(builder) if children.size == 1
@@ -130,23 +127,14 @@ class NonTerminalNode
   def to_s; children.map(&:to_s).join end
 end
 
-class TerminalNode
-  attr_accessor :text
-    
-  def initialize(text)
-    self.text = text
-  end
-  
+module TerminalNode
   def build(builder)
-    text
+    self
   end
   
   def to_ast
-    text
+    self
   end
-  
-  def inspect; text.inspect end
-  def to_s; text.to_s end
 end
 
 class RubyPeg
@@ -276,7 +264,7 @@ class RubyPeg
   end
   
   def create_terminal_node(text)
-    TerminalNode.new(text)
+    text.extend(TerminalNode)
   end
   
   def uncached_node(type,&block)

@@ -13,16 +13,20 @@ describe TerminalNodeTest do
     TerminalNodeTest.parse(text)
   end
   
-  it "terminals are, by default, instances of TerminalNode" do
-    parse("one").should be_kind_of(TerminalNode)
+  it "terminals are, by default, Strings" do
+    parse("one").should == "one"
   end
   
-  it "TerminalNode responds to to_ast by returning itself as a string" do
+  it "they have been, by default, extended with the module TerminalNode" do
+    parse("one").should be_kind_of(TerminalNode)    
+  end
+  
+  it "TerminalNode responds to to_ast by returning itself" do
     parse("one").to_ast.should be_kind_of(String)
     parse("one").to_ast.should == "one"
   end
   
-  it "TerminalNode responds to build(builder) by returning itself as a string" do
+  it "TerminalNode responds to build(builder) by returning itself" do
     class TestBuilder; end
     parse("one").build(TestBuilder.new).should be_kind_of(String)
     parse("one").build(TestBuilder.new).should == "one"
@@ -36,7 +40,7 @@ class CreateTerminalNodeTest < RubyPeg
   end
   
   def create_terminal_node(string)
-    string.to_s
+    /#{string}/
   end
 end
 
@@ -47,7 +51,7 @@ describe CreateTerminalNodeTest do
   end
   
   it "the class of the terminal can be altered by overriding the create_terminal_node(string) method" do
-    parse("one").should be_kind_of(String)
+    parse("one").should be_kind_of(Regexp)
   end
     
 end
