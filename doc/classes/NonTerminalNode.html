@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Class: NonTerminalNode [Ruby PEG]</title>
+  <title>Module: NonTerminalNode [Ruby PEG]</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
@@ -45,7 +45,7 @@
     <div id="classHeader">
         <table class="header-table">
         <tr class="top-aligned-row">
-          <td><strong>Class</strong></td>
+          <td><strong>Module</strong></td>
           <td class="class-name-in-header">NonTerminalNode</td>
         </tr>
         <tr class="top-aligned-row">
@@ -66,15 +66,6 @@
         </tr>
 
 
-        <tr class="top-aligned-row">
-            <td><strong>Parent:</strong></td>
-            <td>
-
-                Object
-
-            </td>
-        </tr>
-
         </table>
     </div>
   <!-- banner header -->
@@ -85,8 +76,9 @@
 
     <div id="description">
       <p>
-The default class of all non terminals that are returned by <a
-href="RubyPeg.html#M000005">RubyPeg#parse</a>.
+By default all non terminals that are returned by <a
+href="RubyPeg.html#M000001">RubyPeg#parse</a> are Arrays that have been
+extended with the <a href="NonTerminalNode.html">NonTerminalNode</a> module
 </p>
 <p>
 If we consider this example:
@@ -124,7 +116,29 @@ If we consider this example:
 Then
 </p>
 <pre>
-  BasketPeg.parse(&quot;1 apple 2 apples 3 pears&quot;).class.should == NonTerminalNode
+  BasketPeg.parse(&quot;1 apple 2 apples 3 pears&quot;).should be_kind_of(NonTerminalNode)
+</pre>
+<p>
+This is an array of children of this non terminal. The children may be
+other non-terminals or terminals The array will be empty if there are no
+children.
+</p>
+<pre>
+  basket = BasketPeg.parse(&quot;1 apple 2 apples 3 pears&quot;)
+  basket.class.should == Array
+  basket.size.should == 3
+  basket.first.should be_kind_of(NonTerminalNode)
+  basket.first.type.should == :item
+  basket.first.class.should == Array
+  basket.first.size.should == 2
+  basket.first.first.should be_kind_of(TerminalNode)
+  basket.first.first.should == &quot;1&quot;
+  basket.first.last.should be_kind_of(NonTerminalNode)
+  basket.first.last.type == :fruit
+  basket.first.last.class.should == Array
+  basket.first.last.size.should == 1
+  basket.first.last.first.should be_kind_of(TerminalNode)
+  basket.first.last.first.should == &quot;apple&quot;
 </pre>
 
     </div>
@@ -137,13 +151,13 @@ Then
 
       <div class="name-list">
 
-        <a href="#M000001">build</a>&nbsp;&nbsp;
+        <a href="#M000021">build</a>&nbsp;&nbsp;
 
-        <a href="#M000003">inspect</a>&nbsp;&nbsp;
+        <a href="#M000023">inspect</a>&nbsp;&nbsp;
 
-        <a href="#M000002">to_ast</a>&nbsp;&nbsp;
+        <a href="#M000022">to_ast</a>&nbsp;&nbsp;
 
-        <a href="#M000004">to_s</a>&nbsp;&nbsp;
+        <a href="#M000024">to_s</a>&nbsp;&nbsp;
 
       </div>
     </div>
@@ -163,43 +177,13 @@ Then
         <table>
 
         <tr class="top-aligned-row context-row">
-          <td class="context-item-name">children</td>
-
-          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
-
-          <td class="context-item-desc">
-Contains an array of children of this non terminal. The children may be
-other non-terminals or terminals The array will be empty if there are no
-children.
-
-<pre>
-  basket = BasketPeg.parse(&quot;1 apple 2 apples 3 pears&quot;)
-  basket.children.class.should == Array
-  basket.children.size.should == 3
-  basket.children.first.class.should == NonTerminalNode
-  basket.children.first.type.should == :item
-  basket.children.first.children.class.should == Array
-  basket.children.first.children.size.should == 2
-  basket.children.first.children.first.should be_kind_of(TerminalNode)
-  basket.children.first.children.first.should == &quot;1&quot;
-  basket.children.first.children.last.class.should == NonTerminalNode
-  basket.children.first.children.last.type == :fruit
-  basket.children.first.children.last.children.class.should == Array
-  basket.children.first.children.last.children.size.should == 1
-  basket.children.first.children.last.children.first.should be_kind_of(TerminalNode)
-  basket.children.first.children.last.children.first.should == &quot;apple&quot;
-</pre>
-</td>
-        </tr>
-
-        <tr class="top-aligned-row context-row">
           <td class="context-item-name">type</td>
 
           <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
 
           <td class="context-item-desc">
 Contains the argument given to <a
-href="RubyPeg.html#M000018">RubyPeg#node</a>
+href="RubyPeg.html#M000014">RubyPeg#node</a>
 
 <pre>
   BasketPeg.parse(&quot;1 apple 2 apples 3 pears&quot;).type.should == :basket
@@ -219,12 +203,12 @@ href="RubyPeg.html#M000018">RubyPeg#node</a>
       <h3 class="section-bar">Public Instance methods</h3>
 
 
-      <div id="method-M000001" class="method-detail">
-        <a name="M000001"></a>
+      <div id="method-M000021" class="method-detail">
+        <a name="M000021"></a>
 
         <div class="method-heading">
 
-          <a href="#M000001" class="method-signature">
+          <a href="#M000021" class="method-signature">
 
           <span class="method-name">build</span><span class="method-args">(builder = nil)</span>
 
@@ -279,15 +263,15 @@ children of this node ar recursively called. E.g.,:
 </pre>
 
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000001-source">
+            onclick="toggleCode('M000021-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000021-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 106</span>
-106:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span> = <span class="ruby-keyword kw">nil</span>)
-107:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">builder</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">type</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">children</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">builder</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">type</span>)
-108:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">children</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">children</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
-109:     <span class="ruby-identifier">children</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span>) }
-110:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 103</span>
+103:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span> = <span class="ruby-keyword kw">nil</span>)
+104:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">builder</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">type</span>,<span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">builder</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">type</span>)
+105:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+106:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">builder</span>) }
+107:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
 
@@ -295,12 +279,12 @@ children of this node ar recursively called. E.g.,:
       </div>
 
 
-      <div id="method-M000003" class="method-detail">
-        <a name="M000003"></a>
+      <div id="method-M000023" class="method-detail">
+        <a name="M000023"></a>
 
         <div class="method-heading">
 
-          <a href="#M000003" class="method-signature">
+          <a href="#M000023" class="method-signature">
 
           <span class="method-name">inspect</span><span class="method-args">()</span>
 
@@ -312,18 +296,18 @@ children of this node ar recursively called. E.g.,:
 
           <p>
 Lists the non-terminal node and its children. Same content as <a
-href="NonTerminalNode.html#M000002">to_ast</a> but in string form.
+href="NonTerminalNode.html#M000022">to_ast</a> but in string form.
 </p>
 <pre>
   BasketPeg.parse(&quot;1 apple 2 apples 3 pears&quot;).inspect.should == '[:basket, [:item, &quot;1&quot;, [:fruit, &quot;apple&quot;]], [:item, &quot;2&quot;, [:fruit, &quot;apple&quot;]], [:item, &quot;3&quot;, [:fruit, &quot;pear&quot;]]]'
 </pre>
 
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000003-source">
+            onclick="toggleCode('M000023-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000023-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 122</span>
-122:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>; <span class="ruby-identifier">to_ast</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 119</span>
+119:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>; <span class="ruby-identifier">to_ast</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
 
@@ -331,12 +315,12 @@ href="NonTerminalNode.html#M000002">to_ast</a> but in string form.
       </div>
 
 
-      <div id="method-M000002" class="method-detail">
-        <a name="M000002"></a>
+      <div id="method-M000022" class="method-detail">
+        <a name="M000022"></a>
 
         <div class="method-heading">
 
-          <a href="#M000002" class="method-signature">
+          <a href="#M000022" class="method-signature">
 
           <span class="method-name">to_ast</span><span class="method-args">()</span>
 
@@ -358,13 +342,13 @@ and the optional &#8217;s&#8217; in apples and pears do not appear.
 </p>
 
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000002-source">
+            onclick="toggleCode('M000022-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000022-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 116</span>
-116:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_ast</span>
-117:     [<span class="ruby-identifier">type</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">children</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_ast</span>)]
-118:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 113</span>
+113:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_ast</span>
+114:     [<span class="ruby-identifier">type</span>,<span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_ast</span>)]
+115:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
 
@@ -372,12 +356,12 @@ and the optional &#8217;s&#8217; in apples and pears do not appear.
       </div>
 
 
-      <div id="method-M000004" class="method-detail">
-        <a name="M000004"></a>
+      <div id="method-M000024" class="method-detail">
+        <a name="M000024"></a>
 
         <div class="method-heading">
 
-          <a href="#M000004" class="method-signature">
+          <a href="#M000024" class="method-signature">
 
           <span class="method-name">to_s</span><span class="method-args">()</span>
 
@@ -389,7 +373,7 @@ and the optional &#8217;s&#8217; in apples and pears do not appear.
 
           <p>
 Returns the result of calling <a
-href="NonTerminalNode.html#M000004">to_s</a> on each of its children. By
+href="NonTerminalNode.html#M000024">to_s</a> on each of its children. By
 default, TerminalNode#to_s returns its text value, so:
 </p>
 <pre>
@@ -401,11 +385,11 @@ and the optional &#8217;s&#8217; in apples and pears do not appear.
 </p>
 
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000004-source">
+            onclick="toggleCode('M000024-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000024-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 127</span>
-127:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>; <span class="ruby-identifier">children</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_s</span>).<span class="ruby-identifier">join</span> <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/ruby_peg.rb, line 124</span>
+124:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>; <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_s</span>).<span class="ruby-identifier">join</span> <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
 

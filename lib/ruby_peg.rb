@@ -5,8 +5,10 @@
 # or include the ruby_peg gem as a dependency for 
 # your source
 
-# The default class of all non terminals that 
-# are returned by RubyPeg#parse.
+# By default all non terminals that 
+# are returned by RubyPeg#parse are Arrays 
+# that have been extended with the NonTerminalNode
+# module
 #
 # If we consider this example:
 #   class BasketPeg < RubyPeg
@@ -37,38 +39,33 @@
 #     end
 #   end
 # Then
-#   BasketPeg.parse("1 apple 2 apples 3 pears").class.should == NonTerminalNode
-class NonTerminalNode
+#   BasketPeg.parse("1 apple 2 apples 3 pears").should be_kind_of(NonTerminalNode)
+#
+# This is an array of children of this non terminal.
+# The children may be other non-terminals or terminals
+# The array will be empty if there are no children.
+#
+#   basket = BasketPeg.parse("1 apple 2 apples 3 pears")
+#   basket.class.should == Array
+#   basket.size.should == 3
+#   basket.first.should be_kind_of(NonTerminalNode)
+#   basket.first.type.should == :item
+#   basket.first.class.should == Array
+#   basket.first.size.should == 2
+#   basket.first.first.should be_kind_of(TerminalNode)
+#   basket.first.first.should == "1"
+#   basket.first.last.should be_kind_of(NonTerminalNode)
+#   basket.first.last.type == :fruit
+#   basket.first.last.class.should == Array
+#   basket.first.last.size.should == 1
+#   basket.first.last.first.should be_kind_of(TerminalNode)
+#   basket.first.last.first.should == "apple"
+module NonTerminalNode
   
   # Contains the argument given to RubyPeg#node
   #   BasketPeg.parse("1 apple 2 apples 3 pears").type.should == :basket
   attr_accessor :type
-  
-  # Contains an array of children of this non terminal.
-  # The children may be other non-terminals or terminals
-  # The array will be empty if there are no children.
-  #
-  #   basket = BasketPeg.parse("1 apple 2 apples 3 pears")
-  #   basket.children.class.should == Array
-  #   basket.children.size.should == 3
-  #   basket.children.first.class.should == NonTerminalNode
-  #   basket.children.first.type.should == :item
-  #   basket.children.first.children.class.should == Array
-  #   basket.children.first.children.size.should == 2
-  #   basket.children.first.children.first.should be_kind_of(TerminalNode)
-  #   basket.children.first.children.first.should == "1"
-  #   basket.children.first.children.last.class.should == NonTerminalNode
-  #   basket.children.first.children.last.type == :fruit
-  #   basket.children.first.children.last.children.class.should == Array
-  #   basket.children.first.children.last.children.size.should == 1
-  #   basket.children.first.children.last.children.first.should be_kind_of(TerminalNode)
-  #   basket.children.first.children.last.children.first.should == "apple"
-  attr_accessor :children
-  
-  def initialize(type,children) #:nodoc:
-    self.type = type
-    self.children = children
-  end
+
   
   # This is a quick way of carrying out the visitor pattern on the parsed structure.
   # 
@@ -104,9 +101,9 @@ class NonTerminalNode
   #   BasketPeg.parse("1 apple 2 apples 3 pears").build(counter)
   #   counter.total.should == 12.0
   def build(builder = nil)
-    return builder.send(type,*children) if builder.respond_to?(type)
-    return children.first.build(builder) if children.size == 1
-    children.map { |c| c.build(builder) }
+    return builder.send(type,*self) if builder.respond_to?(type)
+    return self.first.build(builder) if self.size == 1
+    self.map { |c| c.build(builder) }
   end
   
   # Returns the node network as an abstract syntax tree
@@ -114,7 +111,7 @@ class NonTerminalNode
   #   BasketPeg.parse("1 apple 2 apples 3 pears").to_ast.should == [:basket, [:item, "1", [:fruit, "apple"]], [:item, "2", [:fruit, "apple"]], [:item, "3", [:fruit, "pear"]]]
   # Note that the items wrapped in ignore {} in the parser, shuch as the spaces and the optional 's' in apples and pears do not appear.
   def to_ast
-    [type,*children.map(&:to_ast)]
+    [type,*self.map(&:to_ast)]
   end
   
   # Lists the non-terminal node and its children. Same content as #to_ast but in string form.
@@ -124,7 +121,7 @@ class NonTerminalNode
   # Returns the result of calling to_s on each of its children. By default, TerminalNode#to_s returns its text value, so:
   #   BasketPeg.parse("1 apple 2 apples 3 pears").to_s.should == "1apple2apple3pear"
   # Note that the items wrapped in ignore {} in the parser, shuch as the spaces and the optional 's' in apples and pears do not appear.
-  def to_s; children.map(&:to_s).join end
+  def to_s; self.map(&:to_s).join end
 end
 
 module TerminalNode
@@ -275,9 +272,10 @@ class RubyPeg
     return nil
   end
   
-  def create_non_terminal_node(type,children)
-    return type.new(children) if type.is_a?(Class)
-    NonTerminalNode.new(type,children)
+  def create_non_terminal_node(type,children_array)
+    children_array.extend(NonTerminalNode)
+    children_array.type = type
+    children_array
   end
   
   def put_in_sequence(result)

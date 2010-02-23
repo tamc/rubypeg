@@ -25,19 +25,30 @@ class MultipleChildNonTerminalNodeTest < RubyPeg
   end
 end
 
-class CustomNode
-  def initialize(children)
-    # ignored
-  end
-end
-
-class CustomNodeNonTerminalNodeTest < RubyPeg
-  def root
-    node CustomNode do
-      terminal("one")
-    end
-  end 
-end
+# class CustomNode
+#   def initialize(children)
+#     # ignored
+#   end
+# end
+# 
+# class CustomNodeClassNonTerminalNodeTest < RubyPeg
+#   def root
+#     node CustomNode do
+#       terminal("one")
+#     end
+#   end 
+# end
+# 
+# module CustomNodeA; end
+# module CustomNodeB; end
+# 
+# class CustomNodeModuleNonTerminalNodeTest < RubyPeg
+#   def root
+#     node CustomNodeA, CustomNodeB do
+#       terminal("one")
+#     end
+#   end
+# end
 
 class CreateNonTerminalNodeTest < NonTerminalNodeTest
   
@@ -56,7 +67,8 @@ describe NonTerminalNodeTest do
     parse("two").should == nil
   end
   
-  it "if a symbol is passed to the node method then non terminals are, by default, instances of NonTerminalNode" do
+  it "if a symbol is passed to the node method then non terminals are, by default, instances of Array that have been extended with a NonTerminalNode moduoe" do
+    parse("one").class.should == Array
     parse("one").should be_kind_of(NonTerminalNode)
   end
   
@@ -64,14 +76,14 @@ describe NonTerminalNodeTest do
     parse("one").type.should == :one
   end  
   
-  it "NonTerminalNode instances have a children attribute that contains an array of child nodes to this one" do
-    parse("one").children.should be_kind_of(Array)
-    parse("one").children.first.should be_kind_of(TerminalNode)
-    parse("one").children.first.to_s.should == "one"
+  it "NonTerminalNode instances are an array of child nodes" do
+    parse("one").should be_kind_of(Array)
+    parse("one").first.should be_kind_of(TerminalNode)
+    parse("one").first.to_s.should == "one"
   end  
 
-  it "if there are no children, this returns an empty array" do
-    ChildlessNonTerminalNodeTest.parse("one").children.should == []
+  it "if there are no children, it is an empty array" do
+    ChildlessNonTerminalNodeTest.parse("one").should == []
   end
   
   it "NonTerminalNode instances respond to to_ast by returning [:type,*children]" do
@@ -108,9 +120,15 @@ describe NonTerminalNodeTest do
     result.last.should == "one"
   end
   
-  it "if a class is passed to the node method then a class of that type is created as the non-terminal. Its initializer must take an array of children as its argument" do
-    CustomNodeNonTerminalNodeTest.parse("one").should be_kind_of(CustomNode)
-  end
+  # it "if a class is passed to the node method then a class of that type is created as the non-terminal. Its initializer must take an array of children as its argument" do
+  #   CustomNodeClassNonTerminalNodeTest.parse("one").class.should == CustomNode
+  # end
+  # 
+  # it "if one or more modules are passed to the node method then they are used to extend the non-terminal array" do
+  #   CustomNodeModuleNonTerminalNodeTest.parse("one").should be_kind_of(Array)
+  #   CustomNodeModuleNonTerminalNodeTest.parse("one").should be_kind_of(CustomNodeA)
+  #   CustomNodeModuleNonTerminalNodeTest.parse("one").should be_kind_of(CustomNodeB)
+  # end
   
 end
 
@@ -145,7 +163,7 @@ end
 describe BasketPeg do
   
   it "Illustrates NonTerminalNode" do
-    BasketPeg.parse("1 apple 2 apples 3 pears").class.should == NonTerminalNode
+    BasketPeg.parse("1 apple 2 apples 3 pears").should be_kind_of(NonTerminalNode)
   end
   
   it "Illustrates NonTerminalNode#type" do
@@ -192,20 +210,20 @@ describe BasketPeg do
   
   it "Illustrates NonTerminalNode#children" do
     basket = BasketPeg.parse("1 apple 2 apples 3 pears")
-    basket.children.class.should == Array
-    basket.children.size.should == 3
-    basket.children.first.class.should == NonTerminalNode
-    basket.children.first.type.should == :item
-    basket.children.first.children.class.should == Array
-    basket.children.first.children.size.should == 2
-    basket.children.first.children.first.should be_kind_of(TerminalNode)
-    basket.children.first.children.first.should == "1"
-    basket.children.first.children.last.class.should == NonTerminalNode
-    basket.children.first.children.last.type == :fruit
-    basket.children.first.children.last.children.class.should == Array
-    basket.children.first.children.last.children.size.should == 1
-    basket.children.first.children.last.children.first.should be_kind_of(TerminalNode)
-    basket.children.first.children.last.children.first.should == "apple"
+    basket.class.should == Array
+    basket.size.should == 3
+    basket.first.should be_kind_of(NonTerminalNode)
+    basket.first.type.should == :item
+    basket.first.class.should == Array
+    basket.first.size.should == 2
+    basket.first.first.should be_kind_of(TerminalNode)
+    basket.first.first.should == "1"
+    basket.first.last.should be_kind_of(NonTerminalNode)
+    basket.first.last.type == :fruit
+    basket.first.last.class.should == Array
+    basket.first.last.size.should == 1
+    basket.first.last.first.should be_kind_of(TerminalNode)
+    basket.first.last.first.should == "apple"
   end
   
 end
