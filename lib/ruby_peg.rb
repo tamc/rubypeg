@@ -141,10 +141,10 @@ class RubyPeg
     self.new.parse(text_to_parse)
   end
   
-  def self.parse_and_dump(text_to_parse)
+  def self.parse_and_dump(text_to_parse, dump_positive_matches_only = false)
     e = new
     r = e.parse(text_to_parse)
-    e.pretty_print_cache
+    e.pretty_print_cache(dump_positive_matches_only)
     r
   end
   
@@ -229,12 +229,17 @@ class RubyPeg
     put_in_sequence(cache(t,self.index,uncached_node(t,&block)))
   end
       
-  def pretty_print_cache
+  def pretty_print_cache(only_if_match = false)
     (0...text_to_parse.size).each do |i|
       print "#{text_to_parse[i].inspect[1...-1]}\t#{i}\t"
       @cache.each do |name,indexes|
         result = indexes[i]
-        print "[#{name.inspect},#{result.first.inspect}] " if result
+        next unless result
+        if only_if_match
+          print "[#{name.inspect},#{result.first.inspect}] " if result.first
+        else
+          print "[#{name.inspect},#{result.first.inspect}] " 
+        end
       end
       print "\n"
     end
