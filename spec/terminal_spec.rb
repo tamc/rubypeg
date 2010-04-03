@@ -26,10 +26,10 @@ describe TerminalNodeTest do
     parse("one").to_ast.should == "one"
   end
   
-  it "TerminalNode responds to build(builder) by returning itself" do
+  it "TerminalNode responds to visit(builder) by returning itself" do
     class TestBuilder; end
-    parse("one").build(TestBuilder.new).should be_kind_of(String)
-    parse("one").build(TestBuilder.new).should == "one"
+    parse("one").visit(TestBuilder.new).should be_kind_of(String)
+    parse("one").visit(TestBuilder.new).should == "one"
   end
   
 end

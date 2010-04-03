@@ -9,7 +9,7 @@ describe TextPeg2RubyPeg do
   def check(input,output)
     ruby = TextPeg2RubyPeg.new
     peg = TextPeg.parse(input)
-    peg.build(ruby)
+    peg.visit(ruby)
     ruby.to_ruby.should == output
   end  
 
@@ -294,7 +294,7 @@ it "parses its own grammar" do
   output = IO.readlines(File.join(File.dirname(__FILE__),'../lib/text_peg.rb')).join
   ruby = TextPeg2RubyPeg.new
   peg = TextPeg.parse(input)
-  peg.build(ruby)
+  peg.visit(ruby)
   r = ruby.to_ruby
   r.should == output
 end

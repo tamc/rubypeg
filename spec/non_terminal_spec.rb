@@ -97,20 +97,20 @@ describe NonTerminalNodeTest do
     ChildlessNonTerminalNodeTest.parse("one").to_ast.should == [:one]
   end
   
-  it "NonTerminalNode instances respond to build(builder) by trying to call a method with the same name on the builder and with its children as arguments" do
+  it "NonTerminalNode instances respond to visit(builder) by trying to call a method with the same name on the builder and with its children as arguments" do
     builder = mock(:TestBuilder)
     builder.should_receive(:one).with {|a| a.kind_of?(TerminalNode) && a.to_s == "one"}.and_return(1)
-    parse("one").build(builder).should == 1
+    parse("one").visit(builder).should == 1
   end
   
-  it "If the builder doesn't have a method with its name, then it calls build(builder) on its children, returning a string if there is only one child" do
+  it "If the builder doesn't have a method with its name, then it calls visit(builder) on its children, returning a string if there is only one child" do
     builder = mock(:TestBuilder)
-    parse("one").build(builder).should == "one"
+    parse("one").visit(builder).should == "one"
   end
   
-  it "If the builder doesn't have a method with its name, then it calls build(builder) on its children, returning a an array of strings if there is more than one child" do
+  it "If the builder doesn't have a method with its name, then it calls visit(builder) on its children, returning a an array of strings if there is more than one child" do
     builder = mock(:TestBuilder)
-    MultipleChildNonTerminalNodeTest.parse("onetwo").build(builder).should == ["one","two"]
+    MultipleChildNonTerminalNodeTest.parse("onetwo").visit(builder).should == ["one","two"]
   end
   
   it "the class of the non terminal can be altered by overriding the create_non_terminal_node(type,children) method" do
@@ -183,7 +183,7 @@ describe BasketPeg do
   end
   
   it "Illustrates NonTerminalNode#build" do
-    BasketPeg.parse("1 apple 2 apples 3 pears").build.should == [["1", "apple"], ["2", "apple"], ["3", "pear"]]
+    BasketPeg.parse("1 apple 2 apples 3 pears").visit.should == [["1", "apple"], ["2", "apple"], ["3", "pear"]]
     class BasketPegBuilderExample
       attr_accessor :total
       
@@ -192,7 +192,7 @@ describe BasketPeg do
       end
       
       def item(number,kind)
-        @total = @total + (number.to_f * kind.build(self).to_f)
+        @total = @total + (number.to_f * kind.visit(self).to_f)
       end
       
       def fruit(kind_of_fruit)
@@ -204,7 +204,7 @@ describe BasketPeg do
       end
     end
     counter = BasketPegBuilderExample.new
-    BasketPeg.parse("1 apple 2 apples 3 pears").build(counter)
+    BasketPeg.parse("1 apple 2 apples 3 pears").visit(counter)
     counter.total.should == 12.0
   end
   

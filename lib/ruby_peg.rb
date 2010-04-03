@@ -100,10 +100,10 @@ module NonTerminalNode
   #   counter = BasketPegBuilderExample.new
   #   BasketPeg.parse("1 apple 2 apples 3 pears").build(counter)
   #   counter.total.should == 12.0
-  def build(builder = nil)
+  def visit(builder = nil)
     return builder.send(type,*self) if builder.respond_to?(type)
-    return self.first.build(builder) if self.size == 1
-    self.map { |c| c.build(builder) }
+    return self.first.visit(builder) if self.size == 1
+    self.map { |c| c.visit(builder) }
   end
   
   # Returns the node network as an abstract syntax tree
@@ -125,7 +125,7 @@ module NonTerminalNode
 end
 
 module TerminalNode
-  def build(builder)
+  def visit(builder)
     self
   end
   

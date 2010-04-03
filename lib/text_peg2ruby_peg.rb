@@ -22,12 +22,12 @@ class TextPeg2RubyPeg
   
 
   def TextPeg2RubyPeg.parse_to_ruby(text_peg)
-    TextPeg.parse(text_peg).build(TextPeg2RubyPeg.new)
+    TextPeg.parse(text_peg).visit(TextPeg2RubyPeg.new)
   end
 
   def TextPeg2RubyPeg.parse_to_loaded_class(text_peg)
     builder = TextPeg2RubyPeg.new
-    ruby =  TextPeg.parse(text_peg).build(builder)
+    ruby =  TextPeg.parse(text_peg).visit(builder)
     Kernel.eval(ruby)
     Kernel.eval(builder.class_name)
   end
@@ -49,20 +49,20 @@ class TextPeg2RubyPeg
   def text_peg(*definitions) #:nodoc:
     self.ruby = []
     self.tabs = 0
-    definitions.map { |d| d.build(self) }
+    definitions.map { |d| d.visit(self) }
     close_class
     to_ruby
   end
   
   def definition(identifier,expression) #:nodoc:
-    non_clashing_name = identifier.build(self)
+    non_clashing_name = identifier.visit(self)
     unless class_name
       define_class non_clashing_name
       define_root non_clashing_name
     end
     line "def #{non_clashing_name.to_method_name}"
     indent
-    line expression.build(self)
+    line expression.visit(self)
     outdent
     line "end"
     line
@@ -70,7 +70,7 @@ class TextPeg2RubyPeg
   
   def node(identifier,expression) #:nodoc:
     original_name = identifier.to_s
-    non_clashing_name = identifier.build(self)
+    non_clashing_name = identifier.visit(self)
     unless class_name
       define_class non_clashing_name
       define_root non_clashing_name
@@ -79,7 +79,7 @@ class TextPeg2RubyPeg
     indent
     line "node :#{original_name.to_method_name} do"
     indent
-    line expression.build(self)
+    line expression.visit(self)
     outdent
     line "end"
     outdent
@@ -107,51 +107,51 @@ class TextPeg2RubyPeg
   end
   
   def not_followed_by(element) #:nodoc:
-    "not_followed_by { #{element.build(self)} }"
+    "not_followed_by { #{element.visit(self)} }"
   end
   
   def followed_by(element) #:nodoc:
-    "followed_by { #{element.build(self)} }"
+    "followed_by { #{element.visit(self)} }"
   end
   
   def ignored(element) #:nodoc:
-    "ignore { #{element.build(self)} }"
+    "ignore { #{element.visit(self)} }"
   end
     
   def optional(element) #:nodoc:
-    "optional { #{element.build(self)} }"
+    "optional { #{element.visit(self)} }"
   end
   
   def one_or_more(element) #:nodoc:
-    "one_or_more { #{element.build(self)} }"
+    "one_or_more { #{element.visit(self)} }"
   end
   
   def any_number_of(element) #:nodoc:
-    "any_number_of { #{element.build(self)} }"
+    "any_number_of { #{element.visit(self)} }"
   end
   
   def sequence(*elements) #:nodoc:
-    elements.map { |e| e.build(self) }.join(" && ")
+    elements.map { |e| e.visit(self) }.join(" && ")
   end
   
   def alternatives(*elements) #:nodoc:
-    elements.map { |e| e.build(self) }.join(" || ")    
+    elements.map { |e| e.visit(self) }.join(" || ")    
   end
   
   def bracketed_expression(expression) #:nodoc:
-    "(#{expression.build(self)})"
+    "(#{expression.visit(self)})"
   end
   
   def terminal_string(string) #:nodoc:
-    %Q{terminal(#{string.build(self).inspect})}
+    %Q{terminal(#{string.visit(self).inspect})}
   end
 
   def terminal_regexp(regexp) #:nodoc:
-    "terminal(/#{regexp.build(self)}/)"
+    "terminal(/#{regexp.visit(self)}/)"
   end
   
   def terminal_character_range(regexp) #:nodoc:
-    "terminal(/#{regexp.build(self)}/)"
+    "terminal(/#{regexp.visit(self)}/)"
   end
   
   def any_character #:nodoc:
