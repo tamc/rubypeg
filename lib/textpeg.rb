@@ -1,4 +1,4 @@
-require 'ruby_peg'
+require 'rubypeg'
 
 class TextPeg < RubyPeg
   

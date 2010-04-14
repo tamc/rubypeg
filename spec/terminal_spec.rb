@@ -1,5 +1,5 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-require 'ruby_peg'
+require 'rubypeg'
 
 class TerminalNodeTest < RubyPeg
   def root

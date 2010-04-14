@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.])
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
-require 'text_peg2ruby_peg'
+require 'textpeg2rubypeg'
 text_peg = IO.readlines(File.join(File.dirname(__FILE__),'excel_peg.txt')).join
 ast = TextPeg.parse(text_peg)
 # puts ast.to_ast

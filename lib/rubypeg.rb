@@ -2,7 +2,7 @@
 # at runtime by a RubyPeg parser.
 #
 # You can either distribute it in your source code
-# or include the ruby_peg gem as a dependency for 
+# or include the rubypeg gem as a dependency for 
 # your source
 
 # By default all non terminals that 

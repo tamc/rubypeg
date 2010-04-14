@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
 $:.unshift File.join(File.dirname(__FILE__), *%w[.])
-require 'ruby_peg'
+require 'rubypeg'
 require 'arithmetic_peg'
 
 module TerminalNode

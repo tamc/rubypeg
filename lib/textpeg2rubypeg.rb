@@ -89,7 +89,7 @@ class TextPeg2RubyPeg
   
   def define_class(name) #:nodoc:
     self.class_name = name.to_class_name
-    line "require 'ruby_peg'"
+    line "require 'rubypeg'"
     line ""
     line "class #{class_name} < RubyPeg"
     indent

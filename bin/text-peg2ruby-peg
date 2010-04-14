@@ -2,15 +2,15 @@
 require 'optparse'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
-require 'text_peg2ruby_peg'
-require 'text_peg'
-require 'ruby_peg'
+require 'textpeg2rubypeg'
+require 'textpeg'
+require 'rubypeg'
 
 if ARGV[0]
   input = IO.readlines(ARGV[0]).join
   ruby = TextPeg2RubyPeg.new
   peg = TextPeg.parse(input)
-  peg.build(ruby)
+  peg.visit(ruby)
   if ARGV[1]
     File.open(ARGV[1],'w') { |f| f.puts ruby.to_ruby }
   else

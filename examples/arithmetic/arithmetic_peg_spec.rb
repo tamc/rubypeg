@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), *%w[.])
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. .. lib])
-require 'ruby_peg'
+require 'rubypeg'
 require 'arithmetic_peg'
 
 describe Arithmetic do
