@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.summary = "RubyPeg helps you to create readable Parsing Expression Grammars (PEG) in, err, ruby"
   s.files = ["LICENSE", "README", "{spec,lib,bin,doc,examples}/**/*"].map{|p| Dir[p]}.flatten
+  s.add_dependency "rubyscriptwriter"
   s.executables = ["text-peg2ruby-peg"]
   s.require_path = "lib"
   s.has_rdoc = true
