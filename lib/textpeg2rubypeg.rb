@@ -1,4 +1,4 @@
-require 'text_peg'
+require 'textpeg'
 
 class String
   
