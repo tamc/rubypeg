@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "rubypeg"
-  s.version = '0.0.3'
+  s.version = '0.0.4'
   s.author = "Thomas Counsell, Green on Black Ltd"
   s.email = "ruby-peg@greenonblack.com"
   s.homepage = "http://wiki.github.com/tamc/rubypeg/"
