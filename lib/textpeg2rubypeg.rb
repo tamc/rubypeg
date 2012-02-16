@@ -89,6 +89,7 @@ class TextPeg2RubyPeg
   
   def define_class(name) #:nodoc:
     self.class_name = name.to_class_name
+    line "# encoding: utf-8"
     line "require 'rubypeg'"
     line ""
     line "class #{class_name} < RubyPeg"

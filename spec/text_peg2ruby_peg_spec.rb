@@ -18,6 +18,7 @@ input = <<END
   one = .
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -40,6 +41,7 @@ input = <<END
   one = . . .
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -62,6 +64,7 @@ input = <<END
   one = . | . | .
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -84,6 +87,7 @@ input = <<END
   one = (. .) | .
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -106,6 +110,7 @@ input = <<END
   one := . . .
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -130,6 +135,7 @@ input = <<END
   one = !. &. `.
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -152,6 +158,7 @@ input = <<END
   one = .? .+ .*
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -174,6 +181,7 @@ input = <<END
   one = "one"
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -196,6 +204,7 @@ input = <<END
   one = '"'
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -218,6 +227,7 @@ input = <<END
   one = [a-z]
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -240,6 +250,7 @@ input = <<END
   one = /one/
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
@@ -262,6 +273,7 @@ input = <<END
   one = /one/
 END
 output = <<END
+# encoding: utf-8
 require 'rubypeg'
 
 class One < RubyPeg
