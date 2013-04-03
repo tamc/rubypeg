@@ -2,7 +2,7 @@
 
 RubyPeg helps you to create readable Parsing Expression Grammars (PEG) in ruby.
 
-This software is (c) 2010 Green on Black Ltd and distributed under the open source [MIT](http://www.opensource.org/licenses/mit-license.php) licence. (See LICENCE for the wording).
+This software is (c) 2010 Green on Black Ltd and distributed under the open source [MIT licence](http://www.opensource.org/licenses/mit-license.php). (See LICENCE for the wording).
 
 If you like this code, employ us: http://www.greenonblack.com
 
